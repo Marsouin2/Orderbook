@@ -16,10 +16,11 @@ enum class ESide
 class Order
 {
 public:
-    Order() = default;
+    Order(EOrderType orderType, int orderId, ESide orderSide, unsigned int price, unsigned int quantity);
     ~Order() = default;
 
     ESide getOrderSide() const { return _orderSide; };
+    unsigned int getOrderId() const { return _orderId; };
 private:
     int _orderId;
     EOrderType _orderType;
