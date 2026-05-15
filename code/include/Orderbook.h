@@ -19,7 +19,13 @@ public:
     std::shared_ptr<Order> getOrderById(const int orderId);
     void addNewBuyOrder(std::shared_ptr<Order> pNewOrder);
     void addNewSellOrder(std::shared_ptr<Order> pNewOrder);
-private:
+
+private: // functions
+    void matchBidWithAsk(std::shared_ptr<Order> pNewOrder);
+    void matchAskWithBid(std::shared_ptr<Order> pNewAskOrder);
+    void updateAskAndBidValues(std::shared_ptr<Order> pAskOrder, std::shared_ptr<Order> pBidOrder);
+
+private: // attributes
     std::unordered_map<int, std::shared_ptr<Order>> _askOrders;
     std::unordered_map<int, std::shared_ptr<Order>> _bidOrders;
 };
