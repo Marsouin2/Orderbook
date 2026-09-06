@@ -1,3 +1,5 @@
+#ifndef ORDER_H_
+#define ORDER_H_
 
 enum class EOrderType
 {
@@ -26,8 +28,7 @@ public:
     int getOrderQuantity() const { return _iQuantity; };
     // SETTERS
     void setOrderQuantity(const int newQuantity) { _iQuantity = newQuantity; };
-
-    int buyOrderQuantity(int buyQuantity);
+    
 private:
     int _orderId;
     EOrderType _orderType;
@@ -36,3 +37,5 @@ private:
     int _iPrice;
     // time of the arrived order (need to get current time)
 };
+
+#endif
