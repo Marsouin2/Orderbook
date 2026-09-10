@@ -16,15 +16,15 @@ public:
     ~Orderbook() = default;
 
     size_t getSize() const;
-    void addOrder(std::shared_ptr<Order> pNewOrder);
+    void addOrder(const std::shared_ptr<Order>& pNewOrder);
     void cancelOrder(const int orderId);
-    void addNewBuyOrder(std::shared_ptr<Order> pNewOrder);
-    void addNewSellOrder(std::shared_ptr<Order> pNewOrder);
+    void addNewBuyOrder(const std::shared_ptr<Order>& pNewOrder);
+    void addNewSellOrder(const std::shared_ptr<Order>& pNewOrder);
 
 private: // functions
-    void matchBidWithAsk(std::shared_ptr<Order> pNewOrder);
-    void matchAskWithBid(std::shared_ptr<Order> pNewAskOrder);
-    void updateAskAndBidValues(std::shared_ptr<Order> pAskOrder, std::shared_ptr<Order> pBidOrder);
+    void matchBidWithAsk(const std::shared_ptr<Order>& pNewOrder);
+    void matchAskWithBid(const std::shared_ptr<Order>& pNewAskOrder);
+    void updateAskAndBidValues(const std::shared_ptr<Order>& pAskOrder, const std::shared_ptr<Order>& pBidOrder) const;
 
 private: // attributes
     std::unordered_map<int, std::shared_ptr<Order>> _askOrders;

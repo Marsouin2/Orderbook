@@ -5,7 +5,7 @@ size_t Orderbook::getSize() const
     return static_cast<size_t>(_bidOrders.size() + _askOrders.size());
 }
 
-void Orderbook::addNewBuyOrder(std::shared_ptr<Order> pNewOrder)
+void Orderbook::addNewBuyOrder(const std::shared_ptr<Order>& pNewOrder)
 {
     if (0 < pNewOrder->getOrderQuantity())
     {
@@ -13,7 +13,7 @@ void Orderbook::addNewBuyOrder(std::shared_ptr<Order> pNewOrder)
     }
 }
 
-void Orderbook::addNewSellOrder(std::shared_ptr<Order> pNewOrder)
+void Orderbook::addNewSellOrder(const std::shared_ptr<Order>& pNewOrder)
 {
     if (0 < pNewOrder->getOrderQuantity())
     {
@@ -21,7 +21,7 @@ void Orderbook::addNewSellOrder(std::shared_ptr<Order> pNewOrder)
     }
 }
 
-void Orderbook::updateAskAndBidValues(std::shared_ptr<Order> pAskOrder, std::shared_ptr<Order> pBidOrder)
+void Orderbook::updateAskAndBidValues(const std::shared_ptr<Order>& pAskOrder, const std::shared_ptr<Order>& pBidOrder) const
 {
     if (pAskOrder->getOrderQuantity() == pBidOrder->getOrderQuantity())
     {
@@ -40,9 +40,9 @@ void Orderbook::updateAskAndBidValues(std::shared_ptr<Order> pAskOrder, std::sha
     }
 }
 
-void Orderbook::matchBidWithAsk(std::shared_ptr<Order> pNewBidOrder)
+void Orderbook::matchBidWithAsk(const std::shared_ptr<Order>& pNewBidOrder)
 {
-    std::vector<int> vectorOfAskOrdersToDelete{};
+    std::vector<int> vectorOfAskOrdersToDelete;
 
     // try to match the new buy order with a sell order already in the orderbook...
     for (auto& it : _askOrders)
@@ -66,9 +66,9 @@ void Orderbook::matchBidWithAsk(std::shared_ptr<Order> pNewBidOrder)
     }
 }
 
-void Orderbook::matchAskWithBid(std::shared_ptr<Order> pNewAskOrder)
+void Orderbook::matchAskWithBid(const std::shared_ptr<Order>& pNewAskOrder)
 {
-    std::vector<int> vectorOfBidOrdersToDelete{};
+    std::vector<int> vectorOfBidOrdersToDelete;
 
     // try to match the new buy order with a sell order already in the orderbook...
     for (auto& it : _bidOrders)
@@ -92,7 +92,7 @@ void Orderbook::matchAskWithBid(std::shared_ptr<Order> pNewAskOrder)
     }
 }
 
-void Orderbook::addOrder(std::shared_ptr<Order> pNewOrder)
+void Orderbook::addOrder(const std::shared_ptr<Order>& pNewOrder)
 {
     switch(pNewOrder->getOrderSide())
     {
