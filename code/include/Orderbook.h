@@ -25,6 +25,8 @@ private: // functions
     void matchBidWithAsk(const std::shared_ptr<Order>& pNewOrder);
     void matchAskWithBid(const std::shared_ptr<Order>& pNewAskOrder);
     void updateAskAndBidValues(const std::shared_ptr<Order>& pAskOrder, const std::shared_ptr<Order>& pBidOrder) const;
+    bool doOrderAlreadyExistInBid(const std::shared_ptr<Order>& pNewOrder) const;
+    bool doOrderAlreadyExistInAsk(const std::shared_ptr<Order>& pNewOrder) const;
 
 private: // attributes
     std::unordered_map<int, std::shared_ptr<Order>> _askOrders;

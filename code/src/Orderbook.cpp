@@ -9,7 +9,11 @@ void Orderbook::addNewBuyOrder(const std::shared_ptr<Order>& pNewOrder)
 {
     if (0 < pNewOrder->getOrderQuantity())
     {
-        _bidOrders.insert({pNewOrder->getOrderId(), pNewOrder});
+        const auto insertRet = _bidOrders.insert({pNewOrder->getOrderId(), pNewOrder});
+        if (!insertRet.second)
+        {
+            std::cerr << "WARN : orderId#" << pNewOrder->getOrderId() << " has not been added in the bid orders.\n";
+        }
     }
 }
 
@@ -17,7 +21,11 @@ void Orderbook::addNewSellOrder(const std::shared_ptr<Order>& pNewOrder)
 {
     if (0 < pNewOrder->getOrderQuantity())
     {
-        _askOrders.insert({pNewOrder->getOrderId(), pNewOrder});
+        const auto insertRet = _askOrders.insert({pNewOrder->getOrderId(), pNewOrder});
+        if (!insertRet.second)
+        {
+            std::cerr << "WARN : orderId#" << pNewOrder->getOrderId() << " has not been added in the ask orders.\n";
+        }
     }
 }
 
@@ -92,21 +100,63 @@ void Orderbook::matchAskWithBid(const std::shared_ptr<Order>& pNewAskOrder)
     }
 }
 
+bool Orderbook::doOrderAlreadyExistInBid(const std::shared_ptr<Order>& pNewOrder) const
+{
+    bool retVal{false};
+
+    const auto found = _bidOrders.find(pNewOrder->getOrderId());
+    if (found != _bidOrders.end())
+    {
+        retVal = true;
+    }
+
+    return retVal;
+}
+
+bool Orderbook::doOrderAlreadyExistInAsk(const std::shared_ptr<Order>& pNewOrder) const
+{
+    /*bool retVal{false};
+
+    const auto found = _askOrders.find(pNewOrder->getOrderId());
+    if (found != _askOrders.end())
+    {
+        retVal = true;
+    }
+
+    return retVal;*/
+
+    return _askOrders.find(pNewOrder->getOrderId()) != _askOrders.end() ? true : false;
+}
+
 void Orderbook::addOrder(const std::shared_ptr<Order>& pNewOrder)
 {
-    switch(pNewOrder->getOrderSide())
+    if (0 >= pNewOrder->getOrderQuantity())
     {
-        case ESide::Buy:
-            matchBidWithAsk(pNewOrder);
-            addNewBuyOrder(pNewOrder);
-            break;
-        case ESide::Sell:
-            matchAskWithBid(pNewOrder);
-            addNewSellOrder(pNewOrder);
-            break;
-        default:
-            std::cerr << "Unknown order side for order# " << pNewOrder->getOrderId() << ". Order has not been taken in account...\n";
-            break;
+        std::cerr << "ERROR : orderId#" << pNewOrder->getOrderId() << " contain a quantity of 0. Not taken in account.\n";
+    }
+    else
+    {
+        if ((!doOrderAlreadyExistInBid(pNewOrder)) && (!doOrderAlreadyExistInAsk(pNewOrder)))
+        {
+            if (ESide::Buy == pNewOrder->getOrderSide())
+            {
+                matchBidWithAsk(pNewOrder);
+                addNewBuyOrder(pNewOrder);
+            }
+            else if (ESide::Sell == pNewOrder->getOrderSide())
+            {
+                matchAskWithBid(pNewOrder);
+                addNewSellOrder(pNewOrder); 
+            }
+            else
+            {
+                std::cerr << "Unknown order side for order# " << pNewOrder->getOrderId() << ". Order has not been taken in account...\n";
+            }
+        }
+        else
+        {
+            std::cerr << "ERROR : orderId#" << pNewOrder->getOrderId() << " sell order already exist internally. Nothing changed.\n";
+        }
     }
 }
 
