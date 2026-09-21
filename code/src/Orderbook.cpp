@@ -140,13 +140,15 @@ void Orderbook::addOrder(const std::shared_ptr<Order>& pNewOrder)
         {
             if (ESide::Buy == pNewOrder->getOrderSide())
             {
+                std::cout << "DEBUG : new Buy order received price = " << pNewOrder->getOrderPrice() << ", quantity = " << pNewOrder->getOrderQuantity() << '\n';
                 matchBidWithAsk(pNewOrder);
                 addNewBuyOrder(pNewOrder);
             }
             else if (ESide::Sell == pNewOrder->getOrderSide())
             {
+                std::cout << "DEBUG : new Sell order received price = " << pNewOrder->getOrderPrice() << ", quantity = " << pNewOrder->getOrderQuantity() << '\n';
                 matchAskWithBid(pNewOrder);
-                addNewSellOrder(pNewOrder); 
+                addNewSellOrder(pNewOrder);
             }
             else
             {

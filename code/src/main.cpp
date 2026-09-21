@@ -1,4 +1,5 @@
 #include "Orderbook.h"
+#include "OrderFileParser.h"
 
 #include <cassert>
 
@@ -29,9 +30,19 @@ void automaticTests()
 
 int main()
 {
-    //Orderbook orderbook;
+    Orderbook orderbook;
 
-    automaticTests();
+    OrderFileParser orderFileParserInstance;
+    std::vector<std::shared_ptr<Order>> ordersFromFile = orderFileParserInstance.getOrdersFromFile("./TradeSamples/sample1.txt");
+    for (const auto& it : ordersFromFile)
+    {
+        orderbook.addOrder(it);
+    }
+    orderFileParserInstance.getOrdersFromFile("./TradeSamples/sample2.txt");
+    std::cout << "size of the orderbook = " << orderbook.getSize() << '\n';
+
+    // TESTS
+    //automaticTests();
 
     return 0;
 }
