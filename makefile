@@ -13,7 +13,7 @@ OBJS = $(SRCS:$(SRC_DIR)/%.$(SRC_EXT)=$(SRC_DIR)/%.$(OBJ_EXT))
 
 # Options
 CXX = g++
-CXXFLAGS = -I$(INC_DIR) -std=c++17
+CXXFLAGS = -I$(INC_DIR) -std=c++17 -Wall -Wextra
 
 # Default rule
 all: $(EXEC)
@@ -25,7 +25,9 @@ $(EXEC): $(OBJS)
 $(SRC_DIR)/%.$(OBJ_EXT): $(SRC_DIR)/%.$(SRC_EXT)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
+re: clean all
+
 clean:
 	rm -f $(SRC_DIR)/*.$(OBJ_EXT) $(EXEC)
 
-.PHONY: all clean
+.PHONY: all clean re
